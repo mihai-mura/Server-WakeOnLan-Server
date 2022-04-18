@@ -51,7 +51,7 @@ wss.on('connection', (socket) => {
 	});
 });
 
-app.post('/server/on', (req, res) => {
+app.post('/on', (req, res) => {
 	wss.clients.forEach((client) => {
 		if (client.node) {
 			client.send(JSON.stringify({ type: 'power', data: 'on' }));
