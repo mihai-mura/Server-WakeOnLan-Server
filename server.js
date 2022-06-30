@@ -16,7 +16,7 @@ const app = express();
 const httpServer = http.createServer(app);
 const wss = new WebSocketServer({ server: httpServer });
 
-httpServer.listen(80, () => console.log('Server listening on port 80'));
+httpServer.listen(process.env.PORT || 5000, () => console.log(`Server listening on port ${process.env.PORT || 5000}`));
 
 app.use(cors({ origin: '*' }));
 
