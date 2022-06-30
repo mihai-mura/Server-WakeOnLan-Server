@@ -38,8 +38,13 @@ wss.on('connection', (socket) => {
 			case 'state':
 				if (payload.from === 'node') {
 					State.state = payload.serverState;
-					State.ping = payload.ping;
-					State.rssi = payload.rssi;
+					State.ping = parseInt(payload.ping);
+					State.rssi = parseInt(payload.rssi);
+					wss.clients.forEach((client) => {
+						if (!client.node) {
+							client.send(JSON.stringify({ type: 'state', data: State }));
+						}
+					});
 				}
 				break;
 			case 'event':
