@@ -76,6 +76,7 @@ app.post('/notif', async (req, res) => {
 				body: 'Hello World!',
 			},
 		]);
+		res.sendStatus(200);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
