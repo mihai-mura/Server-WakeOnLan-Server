@@ -57,7 +57,7 @@ wss.on('connection', (socket) => {
 				}
 				break;
 			case 'pushToken':
-				pushToken = payload.data;
+				pushToken = payload;
 				console.log(pushToken);
 				break;
 		}
