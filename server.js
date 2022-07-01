@@ -2,6 +2,7 @@ import http from 'http';
 import cors from 'cors';
 import express from 'express';
 import { WebSocketServer } from 'ws';
+import { Expo } from 'expo-server-sdk';
 
 //* server states: online | offline | waiting | error
 const State = {
@@ -12,6 +13,7 @@ const State = {
 };
 let nodeConnected = false;
 
+const expo = new Expo();
 const app = express();
 const httpServer = http.createServer(app);
 const wss = new WebSocketServer({ server: httpServer });
@@ -63,4 +65,17 @@ app.post('/on', (req, res) => {
 		}
 	});
 	res.sendStatus(200);
+});
+
+app.post('/notif', async (req, res) => {
+	try {
+		expo.chunkPushNotifications({
+			to: 'ExponentPushToken[hUiRbHJmSOlTWU9u96qDzG]',
+			sound: 'default',
+			body: 'Hello World!',
+		});
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
 });

@@ -14,6 +14,7 @@
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
+		"expo-server-sdk": "^3.6.0",
 		"express": "^4.17.3",
 		"ws": "^8.5.0"
 	}
