@@ -30,7 +30,6 @@ wss.on('connection', (socket) => {
 		const payload = JSON.parse(message);
 		//* data types: connected | event | state | pushToken
 		//* events: server_on | server_off | boot_error
-		console.log(payload);
 		switch (payload.type) {
 			case 'connected':
 				if (payload.from === 'node') {
@@ -59,9 +58,9 @@ wss.on('connection', (socket) => {
 				break;
 			case 'pushToken':
 				pushToken = payload.data;
+				console.log(pushToken);
 				break;
 		}
-		console.log(State);
 	});
 });
 
