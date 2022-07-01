@@ -73,7 +73,8 @@ app.post('/notif', async (req, res) => {
 			{
 				to: 'ExponentPushToken[hUiRbHJmSOlTWU9u96qDzG]',
 				sound: 'default',
-				body: 'Hello World!',
+				body: 'This is a test notification',
+				data: { withSome: 'data' },
 			},
 		]);
 		res.sendStatus(200);
