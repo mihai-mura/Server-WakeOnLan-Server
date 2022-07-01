@@ -22,12 +22,15 @@ httpServer.listen(process.env.PORT || 5000, () => console.log(`Server listening 
 
 app.use(cors({ origin: '*' }));
 
+let pushToken = '';
+
 wss.on('connection', (socket) => {
 	console.log('client connected');
 	socket.on('message', (message) => {
 		const payload = JSON.parse(message);
-		//* data types: connected | event | ping | rssi | state
+		//* data types: connected | event | state | pushToken
 		//* events: server_on | server_off | boot_error
+		console.log(payload);
 		switch (payload.type) {
 			case 'connected':
 				if (payload.from === 'node') {
@@ -53,6 +56,10 @@ wss.on('connection', (socket) => {
 				if (payload.from === 'node') {
 					console.log(`Event: ${payload.data}`);
 				}
+				break;
+			case 'pushToken':
+				pushToken = payload.data;
+				break;
 		}
 		console.log(State);
 	});
@@ -69,14 +76,19 @@ app.post('/on', (req, res) => {
 
 app.post('/notif', async (req, res) => {
 	try {
-		expo.chunkPushNotifications([
+		if (!Expo.isExpoPushToken(pushToken)) {
+			console.error(`Push token ${pushToken} is not a valid Expo push token`);
+		}
+
+		await expo.sendPushNotificationsAsync([
 			{
-				to: 'ExponentPushToken[hUiRbHJmSOlTWU9u96qDzG]',
-				sound: 'default',
+				to: pushToken,
+				title: 'Hello World!',
 				body: 'This is a test notification',
-				data: { withSome: 'data' },
+				sound: 'default',
 			},
 		]);
+
 		res.sendStatus(200);
 	} catch (error) {
 		console.log(error);
