@@ -69,11 +69,13 @@ app.post('/on', (req, res) => {
 
 app.post('/notif', async (req, res) => {
 	try {
-		expo.chunkPushNotifications({
-			to: 'ExponentPushToken[hUiRbHJmSOlTWU9u96qDzG]',
-			sound: 'default',
-			body: 'Hello World!',
-		});
+		expo.chunkPushNotifications([
+			{
+				to: 'ExponentPushToken[hUiRbHJmSOlTWU9u96qDzG]',
+				sound: 'default',
+				body: 'Hello World!',
+			},
+		]);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
