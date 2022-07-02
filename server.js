@@ -89,6 +89,7 @@ app.post('/on', (req, res) => {
 app.post('/test-notif', async (req, res) => {
 	try {
 		sendEventNotif(pushToken, 'Test Notification');
+		res.sendStatus(200);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
