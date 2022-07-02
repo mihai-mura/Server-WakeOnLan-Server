@@ -54,11 +54,23 @@ wss.on('connection', (socket) => {
 			case 'event':
 				if (payload.from === 'node') {
 					console.log(`Event: ${payload.data}`);
+					switch (payload.data) {
+						case 'server_on':
+							sendEventNotif(pushToken, 'Server Online');
+							break;
+						case 'server_off':
+							sendEventNotif(pushToken, 'Server Offline');
+							break;
+						case 'boot_error':
+							sendEventNotif(pushToken, 'Server Boot Error');
+							break;
+						default:
+							break;
+					}
 				}
 				break;
 			case 'pushToken':
 				pushToken = payload.token;
-				console.log(pushToken);
 				break;
 		}
 	});
@@ -73,24 +85,17 @@ app.post('/on', (req, res) => {
 	res.sendStatus(200);
 });
 
-app.post('/notif', async (req, res) => {
-	try {
-		if (!Expo.isExpoPushToken(pushToken)) {
-			console.error(`Push token ${pushToken} is not a valid Expo push token`);
-		}
-
-		await expo.sendPushNotificationsAsync([
-			{
-				to: pushToken,
-				title: 'Hello World!',
-				body: 'This is a test notification',
-				sound: 'default',
-			},
-		]);
-
-		res.sendStatus(200);
-	} catch (error) {
-		console.log(error);
-		res.sendStatus(500);
+const sendEventNotif = async (token, title) => {
+	if (!Expo.isExpoPushToken(token)) {
+		console.error(`Push token ${token} is not a valid Expo push token`);
+		return;
 	}
-});
+
+	await expo.sendPushNotificationsAsync([
+		{
+			to: token,
+			title: title,
+			sound: 'default',
+		},
+	]);
+};
