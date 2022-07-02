@@ -70,6 +70,7 @@ wss.on('connection', (socket) => {
 				}
 				break;
 			case 'pushToken':
+				console.log(`Push Token Registred: ${payload.data}`);
 				pushToken = payload.token;
 				break;
 		}
@@ -83,6 +84,15 @@ app.post('/on', (req, res) => {
 		}
 	});
 	res.sendStatus(200);
+});
+
+app.post('/test-notif', async (req, res) => {
+	try {
+		sendEventNotif(pushToken, 'Test Notification');
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
 });
 
 const sendEventNotif = async (token, title) => {
