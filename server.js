@@ -37,6 +37,11 @@ wss.on('connection', (socket) => {
 					State.name = payload.data;
 					socket.node = true;
 					nodeConnected = true;
+					wss.clients.forEach((client) => {
+						if (!client.node) {
+							client.send(JSON.stringify({ type: 'node-state', state: 'on' }));
+						}
+					});
 					sendEventNotif(pushToken, 'NodeMCU Online');
 				}
 				break;
@@ -81,6 +86,11 @@ wss.on('connection', (socket) => {
 		console.log('client disconnected');
 		if (socket.node) {
 			nodeConnected = false;
+			wss.clients.forEach((client) => {
+				if (!client.node) {
+					client.send(JSON.stringify({ type: 'node-state', state: 'off' }));
+				}
+			});
 			sendEventNotif(pushToken, 'NodeMCU Offline');
 		}
 	});
