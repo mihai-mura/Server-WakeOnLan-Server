@@ -34,9 +34,10 @@ wss.on('connection', (socket) => {
 			case 'connected':
 				if (payload.from === 'node') {
 					//*  node connected
+					State.name = payload.data;
 					socket.node = true;
 					nodeConnected = true;
-					State.name = payload.data;
+					sendEventNotif(pushToken, 'NodeMCU Online');
 				}
 				break;
 			case 'state':
@@ -70,9 +71,17 @@ wss.on('connection', (socket) => {
 				}
 				break;
 			case 'pushToken':
-				console.log(`Push Token Registred: ${payload.data}`);
+				console.log(`Push Token Registred: ${payload.token}`);
 				pushToken = payload.token;
 				break;
+		}
+	});
+
+	socket.on('close', () => {
+		console.log('client disconnected');
+		if (socket.node) {
+			nodeConnected = false;
+			sendEventNotif(pushToken, 'NodeMCU Offline');
 		}
 	});
 });
