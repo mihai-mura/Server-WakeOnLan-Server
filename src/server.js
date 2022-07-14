@@ -209,8 +209,7 @@ app.post('/main-light/:action', async (req, res) => {
 				});
 				break;
 			default:
-				res.sendStatus(400);
-				break;
+				return res.sendStatus(400);
 		}
 		res.sendStatus(200);
 	} catch (error) {
