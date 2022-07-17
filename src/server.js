@@ -98,17 +98,13 @@ wss.on('connection', (socket) => {
 	socket.on('close', () => {
 		console.log('client disconnected');
 		if (socket.node_proxmox) {
-			setTimeout(() => {
-				if (!NodesPower.proxmox) {
-					NodesPower.proxmox = false;
-					wss.clients.forEach((client) => {
-						if (!client.node) {
-							client.send(JSON.stringify({ type: 'node-state', state: 'off' }));
-						}
-					});
-					sendEventNotif(pushToken, 'NodeMCU Offline');
+			NodesPower.proxmox = false;
+			wss.clients.forEach((client) => {
+				if (!client.node) {
+					client.send(JSON.stringify({ type: 'node-state', state: 'off' }));
 				}
-			}, 10000);
+			});
+			sendEventNotif(pushToken, 'NodeMCU Offline');
 		}
 	});
 });
