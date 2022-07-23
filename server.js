@@ -26,7 +26,7 @@ const ProxmoxState = {
 	rssi: 0,
 };
 
-let pushToken = '';
+let pushToken = 'ExponentPushToken[uW8BoJDl_UtnaKZvBRtLoI]'; //default token
 
 wss.on('connection', (socket) => {
 	socket.on('message', (message) => {
