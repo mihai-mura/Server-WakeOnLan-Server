@@ -96,15 +96,17 @@ wss.on('connection', (socket) => {
 	});
 
 	socket.on('close', () => {
-		console.log('client disconnected');
 		if (socket.node_proxmox) {
+			console.log('proxmox disconnected');
 			NodesPower.proxmox = false;
 			wss.clients.forEach((client) => {
 				if (!client.node) {
 					client.send(JSON.stringify({ type: 'node-state', state: 'off' }));
 				}
 			});
-			sendEventNotif(pushToken, 'NodeMCU Offline');
+		} else if (socket.node_main_light) {
+			console.log('main light disconnected');
+			NodesPower.mainLight = false;
 		}
 	});
 });
