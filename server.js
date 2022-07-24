@@ -47,10 +47,10 @@ wss.on('connection', (socket) => {
 								client.send(JSON.stringify({ type: 'node-state', state: 'on' }));
 							}
 						});
-						sendEventNotif(pushToken, 'NodeMCU Online');
 						break;
 					case 'node-main-light':
 						console.log('main light connected');
+						NodesPower.mainLight = true;
 						socket.node_main_light = true;
 						break;
 				}
